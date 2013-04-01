@@ -54,8 +54,8 @@
 (defmethod make-sockaddr-for
     ((socket bluetooth-rfcomm-socket) &optional sockaddr &rest address
      &aux (device (first address)) (channel (second address)))
-  (when (stringp (car address)) ;; auto-parse device address if it's a string
-    (push (make-bluetooth-address (pop address)) address))
+  (when (stringp device) ;; auto-parse device address if it's a string
+    (setf device (make-bluetooth-address device)))
   (let ((sockaddr (or sockaddr (make-alien sockaddr-rc))))
     (loop for index from 0 below (alien-size sockaddr-rc :bytes)
           with addr = (sap-alien (alien-sap sockaddr)
